@@ -1,4 +1,4 @@
-chrome.extension.sendMessage({method: "getStyles", url: getMeta("stylish-id-url") || location.href}, function(response) {
+chrome.extension.sendRequest({name:"getStylesForUrl", url: getMeta("stylish-id-url") || location.href}, function(response) {
 	if (response.length == 0) {
 		sendEvent("styleCanBeInstalledChrome");
 	} else {
@@ -61,8 +61,7 @@ document.addEventListener("stylishInstallChrome", function() {
 			getResource(getMeta("stylish-code-chrome"), function(code) {
 				// check for old style json
 				var json = JSON.parse(code);
-				json.method = "saveStyle";
-				chrome.extension.sendMessage(json, function(response) {
+				chrome.extension.sendRequest({name:"saveFromJSON", json: json}, function(response) {
 					sendEvent("styleInstalledChrome");
 				});
 			});
